@@ -16,11 +16,11 @@ const config = {
   url: 'https://prodfact.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: process.env.NODE_ENV === 'production' ? '/TelaMentis/' : '/',
+  baseUrl: process.env.NODE_ENV === 'production' ? '/telamentis/' : '/',
 
   // GitHub pages deployment config
-  organizationName: 'ProdFact',
-  projectName: 'TelaMentis',
+  organizationName: 'prodfact',
+  projectName: 'telamentis',
   trailingSlash: false,
 
   onBrokenLinks: 'throw',
