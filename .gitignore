@@ -1,0 +1,109 @@
+# Rust
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Database
+*.db
+*.sqlite
+
+# Docker
+.dockerignore
+
+# Python (for FastAPI bridge)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Neo4j
+data/
+logs/
+import/
+plugins/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Configuration files with secrets
+config/production.yaml
+config/staging.yaml
+*.key
+*.pem
+*.crt
+
+# Test artifacts
+coverage/
+.coverage
+.pytest_cache/
+.tox/
+
+# Documentation build
+docs/_build/
+site/
+
+# Backup files
+*.bak
+*.backup
+
+# Local development
+.local/
+local/
+
+# Website
+node_modules/
+website/node_modules/
+website/build/
+website/build_*/
+website/cache/
+website/dist/
+website/docs/
+website/docs_*/
+website/docs_*/
+
+# Turbo
+.turbo/

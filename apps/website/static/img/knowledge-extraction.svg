@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="600" viewBox="0 0 700 600">
+  <defs>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#64748B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#475569;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="llmGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="coreGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6366F1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4F46E5;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="graphGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563EB;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="700" height="600" fill="#F8FAFC"/>
+  
+  <!-- Title -->
+  <text x="350" y="30" font-family="Arial" font-size="20" font-weight="bold" fill="#1E293B" text-anchor="middle">Knowledge Extraction Pipeline</text>
+  
+  <!-- Step 1: Unstructured Text Input -->
+  <rect x="50" y="70" width="180" height="120" rx="12" fill="url(#textGradient)" filter="url(#shadow)"/>
+  <text x="140" y="95" font-family="Arial" font-size="14" font-weight="bold" fill="white" text-anchor="middle">Unstructured Text</text>
+  
+  <!-- Sample text content -->
+  <foreignObject x="60" y="105" width="160" height="75">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Arial; font-size: 11px; color: white; line-height: 1.3;">
+      "Alice started working at Acme Corp in January 2023 as a Senior Engineer. She reports to Bob who is the CTO."
+    </div>
+  </foreignObject>
+  
+  <!-- Arrow 1 -->
+  <line x1="230" y1="130" x2="280" y2="130" stroke="#E2E8F0" stroke-width="3" marker-end="url(#arrowhead)"/>
+  
+  <!-- Step 2: LLM Processing -->
+  <rect x="300" y="70" width="180" height="120" rx="12" fill="url(#llmGradient)" filter="url(#shadow)"/>
+  <text x="390" y="95" font-family="Arial" font-size="14" font-weight="bold" fill="white" text-anchor="middle">LLM Processing</text>
+  <text x="390" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle">OpenAI • Anthropic • Gemini</text>
+  
+  <!-- LLM processing details -->
+  <text x="390" y="140" font-family="Arial" font-size="10" fill="white" text-anchor="middle">Entity &amp; Relationship</text>
+  <text x="390" y="155" font-family="Arial" font-size="10" fill="white" text-anchor="middle">Extraction</text>
+  <text x="390" y="175" font-family="Arial" font-size="10" fill="white" text-anchor="middle">+ Temporal Context</text>
+  
+  <!-- Arrow 2 -->
+  <line x1="480" y1="130" x2="530" y2="130" stroke="#E2E8F0" stroke-width="3" marker-end="url(#arrowhead)"/>
+  
+  <!-- Step 3: Structured Output -->
+  <rect x="550" y="70" width="120" height="120" rx="12" fill="url(#coreGradient)" filter="url(#shadow)"/>
+  <text x="610" y="95" font-family="Arial" font-size="14" font-weight="bold" fill="white" text-anchor="middle">Structured</text>
+  <text x="610" y="115" font-family="Arial" font-size="14" font-weight="bold" fill="white" text-anchor="middle">Knowledge</text>
+  
+  <!-- JSON-like structure -->
+  <foreignObject x="560" y="125" width="100" height="55">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: 'Courier New'; font-size: 9px; color: white;">
+      entities: [<br/>
+      &nbsp;Alice: Person<br/>
+      &nbsp;Acme: Company<br/>
+      ]<br/>
+      relationships: [...]
+    </div>
+  </foreignObject>
+  
+  <!-- Downward Arrow -->
+  <line x1="390" y1="200" x2="390" y2="250" stroke="#E2E8F0" stroke-width="3" marker-end="url(#arrowhead)"/>
+  
+  <!-- Step 4: Tela Mentis Core Processing -->
+  <rect x="250" y="270" width="280" height="80" rx="12" fill="url(#coreGradient)" filter="url(#shadow)"/>
+  <text x="390" y="295" font-family="Arial" font-size="16" font-weight="bold" fill="white" text-anchor="middle">Tela Mentis Core</text>
+  <text x="390" y="315" font-family="Arial" font-size="12" fill="white" text-anchor="middle">Schema Alignment • Deduplication • Temporal Indexing</text>
+  <text x="390" y="335" font-family="Arial" font-size="12" fill="white" text-anchor="middle">Multi-tenant Isolation</text>
+  
+  <!-- Downward Arrow -->
+  <line x1="390" y1="360" x2="390" y2="410" stroke="#E2E8F0" stroke-width="3" marker-end="url(#arrowhead)"/>
+  
+  <!-- Step 5: Knowledge Graph -->
+  <rect x="150" y="430" width="480" height="140" rx="12" fill="url(#graphGradient)" filter="url(#shadow)"/>
+  <text x="390" y="455" font-family="Arial" font-size="16" font-weight="bold" fill="white" text-anchor="middle">Temporally-Aware Knowledge Graph</text>
+  
+  <!-- Graph visualization -->
+  <!-- Alice node -->
+  <circle cx="220" cy="500" r="25" fill="white" stroke="#2563EB" stroke-width="2"/>
+  <text x="220" y="505" font-family="Arial" font-size="10" fill="#2563EB" text-anchor="middle">Alice</text>
+  
+  <!-- Acme Corp node -->
+  <circle cx="400" cy="500" r="25" fill="white" stroke="#2563EB" stroke-width="2"/>
+  <text x="400" y="495" font-family="Arial" font-size="9" fill="#2563EB" text-anchor="middle">Acme</text>
+  <text x="400" y="505" font-family="Arial" font-size="9" fill="#2563EB" text-anchor="middle">Corp</text>
+  
+  <!-- Bob node -->
+  <circle cx="560" cy="500" r="25" fill="white" stroke="#2563EB" stroke-width="2"/>
+  <text x="560" y="505" font-family="Arial" font-size="10" fill="#2563EB" text-anchor="middle">Bob</text>
+  
+  <!-- Engineer role node -->
+  <circle cx="310" cy="530" r="20" fill="white" stroke="#10B981" stroke-width="2"/>
+  <text x="310" y="535" font-family="Arial" font-size="8" fill="#10B981" text-anchor="middle">Senior</text>
+  <text x="310" y="545" font-family="Arial" font-size="8" fill="#10B981" text-anchor="middle">Engineer</text>
+  
+  <!-- Relationships -->
+  <!-- Alice works at Acme -->
+  <line x1="245" y1="500" x2="375" y2="500" stroke="white" stroke-width="2"/>
+  <text x="310" y="495" font-family="Arial" font-size="8" fill="white" text-anchor="middle">WORKS_AT</text>
+  <text x="310" y="485" font-family="Arial" font-size="7" fill="#E2E8F0" text-anchor="middle">since: Jan 2023</text>
+  
+  <!-- Alice has role -->
+  <line x1="235" y1="515" x2="295" y2="525" stroke="white" stroke-width="2"/>
+  <text x="265" y="530" font-family="Arial" font-size="8" fill="white" text-anchor="middle">HAS_ROLE</text>
+  
+  <!-- Alice reports to Bob -->
+  <line x1="535" y1="500" x2="245" y2="500" stroke="white" stroke-width="2" opacity="0.7"/>
+  <text x="390" y="520" font-family="Arial" font-size="8" fill="white" text-anchor="middle">REPORTS_TO</text>
+  
+  <!-- Temporal indicators -->
+  <text x="170" y="550" font-family="Arial" font-size="10" fill="white">⏰ Temporal Context:</text>
+  <text x="180" y="565" font-family="Arial" font-size="9" fill="#E2E8F0">• When facts occurred (January 2023)</text>
+  <text x="180" y="580" font-family="Arial" font-size="9" fill="#E2E8F0">• When knowledge was learned (now)</text>
+  
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#E2E8F0" />
+    </marker>
+  </defs>
+</svg> 

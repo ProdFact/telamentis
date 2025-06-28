@@ -1,0 +1,35 @@
+[package]
+name = "kgctl"
+version = "0.1.0"
+edition = "2021"
+authors = ["TelaMentis Contributors"]
+description = "Command-line interface for TelaMentis knowledge graph operations"
+license = "MIT"
+
+[dependencies]
+telamentis-core = { path = "../core" }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+# CLI specific
+clap = { workspace = true }
+figment = { workspace = true }
+
+# HTTP client for API calls
+reqwest = { workspace = true }
+
+# CSV processing
+csv = "1.3"
+
+# Table output
+tabled = "0.14"
+colored = "2.0"
+
+[dev-dependencies]
+tempfile = "3.0"

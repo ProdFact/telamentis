@@ -1,0 +1,160 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.heroBanner {
+  padding: 5rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(49, 46, 129, 0.95), rgba(79, 70, 229, 0.95));
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 3rem 2rem;
+  }
+}
+
+.titleEmphasis {
+  background: linear-gradient(45deg, #fff, #c7d2fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 4rem;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.heroDescription {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin: 1.5rem 0;
+}
+
+.typingContainer {
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.valueProposition {
+  padding: 5rem 0;
+  background-color: var(--ifm-background-color);
+}
+
+.valueHeading {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+}
+
+.valueHeading h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.valueHeading p {
+  font-size: 1.2rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.featureCard {
+  background-color: var(--feature-card-bg);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--feature-card-shadow);
+  height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featureCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.featureCard h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--ifm-color-primary);
+}
+
+.demoSection {
+  padding: 5rem 0;
+  background-color: var(--ifm-background-surface-color);
+}
+
+.bulletPoints {
+  margin: 1.5rem 0;
+}
+
+.bulletPoint {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.bulletIcon {
+  color: var(--ifm-color-success);
+  margin-right: 0.75rem;
+  font-weight: bold;
+}
+
+.codeContainer {
+  margin-top: 2rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.code {
+  margin: 0;
+  padding: 1.5rem;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  background-color: #1e293b;
+  color: #e2e8f0;
+}
+
+.demoImage {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.architectureSection {
+  padding: 5rem 0;
+  background: linear-gradient(to right, rgba(99, 102, 241, 0.05), rgba(99, 102, 241, 0.1));
+}
+
+.sectionDescription {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  font-size: 1.2rem;
+}
+
+.mermaidDiagram {
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--ifm-card-shadow);
+}

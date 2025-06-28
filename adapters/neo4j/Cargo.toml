@@ -1,0 +1,25 @@
+[package]
+name = "telamentis-adapter-neo4j"
+version = "0.1.0"
+edition = "2021"
+authors = ["TelaMentis Contributors"]
+description = "Neo4j adapter for TelaMentis knowledge graph system"
+license = "MIT"
+
+[dependencies]
+telamentis-core = { path = "../../core" }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+
+# Neo4j specific
+neo4j = { workspace = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+testcontainers = "0.15"

@@ -1,0 +1,17 @@
+{
+  "id": "security_hardening_guide",
+  "title": "🛡️ TelaMentis Security Hardening Guide",
+  "description": "This guide provides recommendations for securing your TelaMentis deployment. Security is a multi-layered concern, encompassing the application, its data, underlying infrastructure, and integrations.",
+  "source": "@site/docs/security_hardening_guide.md",
+  "sourceDirName": ".",
+  "slug": "/security_hardening_guide",
+  "permalink": "/TelaMentis/docs/security_hardening_guide",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ProdFact/TelaMentis/edit/main/docs/security_hardening_guide.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055000,
+  "frontMatter": {}
+}

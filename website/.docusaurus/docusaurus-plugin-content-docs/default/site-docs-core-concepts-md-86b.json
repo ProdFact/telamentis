@@ -1,0 +1,17 @@
+{
+  "id": "core_concepts",
+  "title": "core_concepts",
+  "description": "valid_from (DateTime&lt;Utc&gt;)*: When the relationship became true in the real world",
+  "source": "@site/docs/core_concepts.md",
+  "sourceDirName": ".",
+  "slug": "/core_concepts",
+  "permalink": "/TelaMentis/docs/core_concepts",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/ProdFact/TelaMentis/edit/main/docs/core_concepts.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055000,
+  "frontMatter": {}
+}

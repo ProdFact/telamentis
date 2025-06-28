@@ -1,0 +1,21 @@
+[package]
+name = "telamentis-core"
+version = "0.1.0"
+edition = "2021"
+authors = ["TelaMentis Contributors"]
+description = "Core types and traits for TelaMentis knowledge graph system"
+license = "MIT"
+repository = "https://github.com/ProdFact/TelaMentis"
+
+[dependencies]
+tokio = { workspace = true }
+async-trait = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+tokio-test = "0.4"

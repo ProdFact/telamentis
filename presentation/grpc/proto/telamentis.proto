@@ -1,0 +1,246 @@
+syntax = "proto3";
+
+package telamentis;
+
+// Service definition
+service TelaMentis {
+  // Node operations
+  rpc UpsertNode(UpsertNodeRequest) returns (UpsertNodeResponse);
+  rpc GetNode(GetNodeRequest) returns (GetNodeResponse);
+  rpc DeleteNode(DeleteNodeRequest) returns (DeleteNodeResponse);
+  rpc BatchUpsertNodes(BatchUpsertNodesRequest) returns (BatchUpsertNodesResponse);
+
+  // Edge operations
+  rpc UpsertEdge(UpsertEdgeRequest) returns (UpsertEdgeResponse);
+  rpc DeleteEdge(DeleteEdgeRequest) returns (DeleteEdgeResponse);
+  rpc BatchUpsertEdges(BatchUpsertEdgesRequest) returns (BatchUpsertEdgesResponse);
+
+  // Query operations
+  rpc ExecuteQuery(QueryRequest) returns (QueryResponse);
+
+  // LLM operations
+  rpc ExtractKnowledge(ExtractRequest) returns (ExtractResponse);
+  rpc CompleteText(CompleteRequest) returns (CompleteResponse);
+
+  // Health check
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+// Common types
+message Node {
+  optional string id_alias = 1;
+  string label = 2;
+  string props_json = 3; // JSON string for properties
+}
+
+message TimeEdge {
+  string from_node_id = 1;
+  string to_node_id = 2;
+  string kind = 3;
+  string valid_from = 4; // ISO8601 timestamp
+  optional string valid_to = 5; // ISO8601 timestamp
+  string transaction_start_time = 6; // ISO8601 timestamp
+  optional string transaction_end_time = 7; // ISO8601 timestamp
+  string props_json = 8; // JSON string for properties
+}
+
+message PathNode {
+  string id = 1;
+  repeated string labels = 2;
+  string properties_json = 3; // JSON string for properties
+}
+
+message PathRelationship {
+  string id = 1;
+  string rel_type = 2;
+  string start_node_id = 3;
+  string end_node_id = 4;
+  string properties_json = 5; // JSON string for properties
+}
+
+message Path {
+  repeated PathNode nodes = 1;
+  repeated PathRelationship relationships = 2;
+}
+
+// Node requests/responses
+message UpsertNodeRequest {
+  string tenant_id = 1;
+  Node node = 2;
+}
+
+message UpsertNodeResponse {
+  string node_id = 1;
+  bool created = 2;
+}
+
+message GetNodeRequest {
+  string tenant_id = 1;
+  string node_id = 2;
+}
+
+message GetNodeResponse {
+  bool found = 1;
+  optional Node node = 2;
+}
+
+message DeleteNodeRequest {
+  string tenant_id = 1;
+  string node_id = 2;
+}
+
+message DeleteNodeResponse {
+  bool deleted = 1;
+}
+
+message BatchUpsertNodesRequest {
+  string tenant_id = 1;
+  repeated Node nodes = 2;
+}
+
+message BatchUpsertNodesResponse {
+  repeated string node_ids = 1;
+  int32 created_count = 2;
+  int32 updated_count = 3;
+}
+
+// Edge requests/responses
+message UpsertEdgeRequest {
+  string tenant_id = 1;
+  TimeEdge edge = 2;
+}
+
+message UpsertEdgeResponse {
+  string edge_id = 1;
+  bool created = 2;
+}
+
+message DeleteEdgeRequest {
+  string tenant_id = 1;
+  string edge_id = 2;
+}
+
+message DeleteEdgeResponse {
+  bool deleted = 1;
+}
+
+message BatchUpsertEdgesRequest {
+  string tenant_id = 1;
+  repeated TimeEdge edges = 2;
+}
+
+message BatchUpsertEdgesResponse {
+  repeated string edge_ids = 1;
+  int32 created_count = 2;
+  int32 updated_count = 3;
+}
+
+// Query requests/responses
+message QueryRequest {
+  string tenant_id = 1;
+  oneof query {
+    RawQuery raw_query = 2;
+    FindNodesQuery find_nodes_query = 3;
+    FindRelationshipsQuery find_relationships_query = 4;
+    AsOfQuery as_of_query = 5;
+  }
+}
+
+message RawQuery {
+  string query_string = 1;
+  string params_json = 2; // JSON string for parameters
+}
+
+message FindNodesQuery {
+  repeated string labels = 1;
+  string properties_json = 2; // JSON string for property filters
+  optional int32 limit = 3;
+}
+
+message FindRelationshipsQuery {
+  optional string from_node_id = 1;
+  optional string to_node_id = 2;
+  repeated string relationship_types = 3;
+  optional string valid_at = 4; // ISO8601 timestamp
+  optional int32 limit = 5;
+}
+
+message AsOfQuery {
+  QueryRequest base_query = 1;
+  string as_of_time = 2; // ISO8601 timestamp
+}
+
+message QueryResponse {
+  repeated Path paths = 1;
+  int64 execution_time_ms = 2;
+}
+
+// LLM requests/responses
+message LlmMessage {
+  string role = 1;
+  string content = 2;
+}
+
+message ExtractRequest {
+  string tenant_id = 1;
+  repeated LlmMessage messages = 2;
+  optional string system_prompt = 3;
+  optional string desired_schema = 4;
+  optional int32 max_tokens = 5;
+  optional float temperature = 6;
+}
+
+message ExtractionNode {
+  string id_alias = 1;
+  string label = 2;
+  string props_json = 3; // JSON string for properties
+  optional float confidence = 4;
+}
+
+message ExtractionRelation {
+  string from_id_alias = 1;
+  string to_id_alias = 2;
+  string type_label = 3;
+  string props_json = 4; // JSON string for properties
+  optional string valid_from = 5; // ISO8601 timestamp
+  optional string valid_to = 6; // ISO8601 timestamp
+  optional float confidence = 7;
+}
+
+message ExtractionMetadata {
+  string provider = 1;
+  string model_name = 2;
+  optional int64 latency_ms = 3;
+  optional int32 input_tokens = 4;
+  optional int32 output_tokens = 5;
+  optional double cost_usd = 6;
+  repeated string warnings = 7;
+}
+
+message ExtractResponse {
+  repeated ExtractionNode nodes = 1;
+  repeated ExtractionRelation relations = 2;
+  optional ExtractionMetadata metadata = 3;
+}
+
+message CompleteRequest {
+  string tenant_id = 1;
+  string prompt = 2;
+  optional int32 max_tokens = 3;
+  optional float temperature = 4;
+  string params_json = 5; // JSON string for additional parameters
+}
+
+message CompleteResponse {
+  string text = 1;
+  optional ExtractionMetadata metadata = 2;
+}
+
+// Health check
+message HealthCheckRequest {}
+
+message HealthCheckResponse {
+  string status = 1;
+  string version = 2;
+  string timestamp = 3;
+}

@@ -1,0 +1,32 @@
+{
+  "name": "telamentis-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Real-time, temporally-aware, multi-tenant knowledge graphs for AI agents – Rust core, pluggable everything",
+  "keywords": ["knowledge-graph", "ai", "rust", "temporal", "multi-tenant"],
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "dev:website": "turbo dev --filter=website",
+    "lint": "turbo lint",
+    "check-types": "turbo check-types",
+    "test": "turbo test",
+    "test:watch": "turbo test:watch",
+    "clean": "turbo clean",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "turbo build --filter=!website && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "prettier": "^3.1.1", 
+    "turbo": "^1.13.4",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "pnpm@8.15.1",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}

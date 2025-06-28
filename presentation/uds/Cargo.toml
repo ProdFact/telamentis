@@ -1,0 +1,28 @@
+[package]
+name = "telamentis-presentation-uds"
+version = "0.1.0"
+edition = "2021"
+authors = ["TelaMentis Contributors"]
+description = "Unix Domain Socket presentation adapter for TelaMentis"
+license = "MIT"
+
+[dependencies]
+telamentis-core = { path = "../../core" }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+
+# UDS specific
+tokio-util = { version = "0.7", features = ["codec"] }
+bytes = "1.5"
+futures = "0.3"
+bincode = "1.3"
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = "3.8"

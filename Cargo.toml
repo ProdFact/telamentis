@@ -1,0 +1,55 @@
+[workspace]
+members = [
+    "core",
+    "adapters/neo4j",
+    "adapters/in_memory",
+    "adapters/in_memory",
+    "connectors/openai",
+    "connectors/anthropic",
+    "connectors/gemini", 
+    "presentation/fastapi-bridge",
+    "presentation/grpc",
+    "presentation/uds",
+    "kgctl",
+]
+resolver = "2"
+
+[features]
+default = ["adapter-neo4j", "connector-openai"]
+adapter-neo4j = []
+adapter-in-memory = []
+adapter-in-memory = []
+connector-openai = []
+connector-anthropic = []
+connector-gemini = []
+presentation-grpc = []
+presentation-uds = []
+
+[workspace.dependencies]
+# Core dependencies used across workspace
+tokio = { version = "1.0", features = ["full"] }
+async-trait = "0.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+uuid = { version = "1.0", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+thiserror = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Database
+neo4j = "0.6"
+
+# HTTP clients and servers
+reqwest = { version = "0.12", features = ["json"] }
+axum = "0.7"
+tower = "0.4"
+
+# CLI
+clap = { version = "4.0", features = ["derive"] }
+
+# Configuration
+figment = { version = "0.10", features = ["yaml", "env"] }
+
+[workspace.metadata.docs.rs]
+all-features = true

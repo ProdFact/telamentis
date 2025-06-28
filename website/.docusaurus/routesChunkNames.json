@@ -1,0 +1,86 @@
+{
+  "/TelaMentis/__docusaurus/debug-0e2": {
+    "__comp": "__comp---theme-debug-config-23-a-2ff",
+    "__context": {
+      "plugin": "plugin---tela-mentis-docusaurus-debugb-38-251"
+    }
+  },
+  "/TelaMentis/__docusaurus/debug/config-904": {
+    "__comp": "__comp---theme-debug-config-23-a-2ff",
+    "__context": {
+      "plugin": "plugin---tela-mentis-docusaurus-debugb-38-251"
+    }
+  },
+  "/TelaMentis/__docusaurus/debug/content-e59": {
+    "__comp": "__comp---theme-debug-contentba-8-ce7",
+    "__context": {
+      "plugin": "plugin---tela-mentis-docusaurus-debugb-38-251"
+    },
+    "__props": "__props---tela-mentis-docusaurus-debug-contente-5-b-a59"
+  },
+  "/TelaMentis/__docusaurus/debug/globalData-14f": {
+    "__comp": "__comp---theme-debug-global-dataede-0fa",
+    "__context": {
+      "plugin": "plugin---tela-mentis-docusaurus-debugb-38-251"
+    }
+  },
+  "/TelaMentis/__docusaurus/debug/metadata-8a4": {
+    "__comp": "__comp---theme-debug-site-metadata-68-e-3d4",
+    "__context": {
+      "plugin": "plugin---tela-mentis-docusaurus-debugb-38-251"
+    }
+  },
+  "/TelaMentis/__docusaurus/debug/registry-d5b": {
+    "__comp": "__comp---theme-debug-registry-679-501",
+    "__context": {
+      "plugin": "plugin---tela-mentis-docusaurus-debugb-38-251"
+    }
+  },
+  "/TelaMentis/__docusaurus/debug/routes-bb6": {
+    "__comp": "__comp---theme-debug-routes-946-699",
+    "__context": {
+      "plugin": "plugin---tela-mentis-docusaurus-debugb-38-251"
+    }
+  },
+  "/TelaMentis/markdown-page-408": {
+    "__comp": "__comp---theme-mdx-page-1-f-3-b90",
+    "__context": {
+      "plugin": "plugin---tela-mentis-markdown-pagea-74-ae1"
+    },
+    "content": "content---tela-mentis-markdown-page-393-7f5"
+  },
+  "/TelaMentis/search-e80": {
+    "__comp": "__comp---theme-search-page-1-a-4-d6f",
+    "__context": {
+      "plugin": "plugin---tela-mentis-searchc-14-0fb"
+    }
+  },
+  "/TelaMentis/docs-957": {
+    "__comp": "__comp---theme-docs-root-5-e-9-0b6",
+    "__context": {
+      "plugin": "plugin---tela-mentis-docsaba-06c"
+    }
+  },
+  "/TelaMentis/docs-545": {
+    "__comp": "__comp---theme-doc-version-roota-7-b-5de",
+    "__props": "__props---tela-mentis-docsdb-7-6ff"
+  },
+  "/TelaMentis/docs-1c8": {
+    "__comp": "__comp---theme-doc-roota-94-67a"
+  },
+  "/TelaMentis/docs/core_concepts-c1f": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---tela-mentis-docs-core-concepts-86-b-bad"
+  },
+  "/TelaMentis/docs/security_hardening_guide-80a": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---tela-mentis-docs-security-hardening-guide-169-0f9"
+  },
+  "/TelaMentis/-66b": {
+    "__comp": "__comp---site-src-pages-index-tsx-1-df-d3e",
+    "__context": {
+      "plugin": "plugin---tela-mentis-markdown-pagea-74-ae1"
+    },
+    "config": "config---tela-mentis-5-e-9-fd7"
+  }
+}
