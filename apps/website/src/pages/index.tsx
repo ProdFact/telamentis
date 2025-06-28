@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { TypeAnimation } from 'react-type-animation';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '../components/HomepageFeatures';
 import Mermaid from '@theme/Mermaid';
@@ -99,7 +100,7 @@ const result = await telaMentis.extract(tenant, context);`}
           <div className="col col--6">
             <div className={styles.demoGraphic}>
               <img 
-                src="/img/knowledge-extraction.svg" 
+                src={useBaseUrl('/img/knowledge-extraction.svg')} 
                 alt="Knowledge Extraction Demo" 
                 className={styles.demoImage}
               />
@@ -120,6 +121,13 @@ const ArchitectureSection = () => {
           Tela Mentis is built with a pluggable architecture that allows you to customize any component
           while maintaining a consistent core API. This makes it adaptable to any AI application stack.
         </p>
+        <div className={styles.architectureDiagram}>
+          <img 
+            src={useBaseUrl('/img/architecture-diagram.svg')} 
+            alt="Tela Mentis Architecture Diagram" 
+            className={styles.architectureImage}
+          />
+        </div>
         <div className={styles.mermaidDiagram}>
           <Mermaid
             value={`graph TD
@@ -151,47 +159,60 @@ function HomepageHeader() {
   return (
     <header className={clsx('hero', styles.heroBanner)}>
       <div className="container">
-        <h1 className="hero__title">
-          <span className={styles.titleEmphasis}>Tela Mentis</span>
-        </h1>
-        <div className={styles.typingContainer}>
-          <TypeAnimation
-            className="hero__subtitle"
-            sequence={[
-              'AI agents need memory.',
-              1500,
-              'AI agents need temporal awareness.',
-              1500,
-              'AI agents need structured knowledge.',
-              1500,
-              'AI agents need Tela Mentis.',
-              3000,
-            ]}
-            speed={50}
-            repeat={Infinity}
-            style={{ fontSize: '1.5rem' }}
-          />
-        </div>
-        <p className={styles.heroDescription}>
-          Real-time, temporally-aware, multi-tenant knowledge graphs for AI agents
-          <br />Built with a Rust core and pluggable architecture
-        </p>
-        <div className={styles.buttons}>
-          <Link
-            className="button button--primary button--lg"
-            to="/docs/getting_started">
-            Get Started
-          </Link>
-          <Link
-            className="button button--secondary button--outline button--lg"
-            to="https://github.com/ProdFact/TelaMentis">
-            GitHub
-          </Link>
-          <Link
-            className="button button--secondary button--outline button--lg"
-            to="docs/temporal_semantics">
-            Learn About Bitemporal Features
-          </Link>
+        <div className="row">
+          <div className="col col--6">
+            <h1 className="hero__title">
+              <span className={styles.titleEmphasis}>Tela Mentis</span>
+            </h1>
+            <div className={styles.typingContainer}>
+              <TypeAnimation
+                className="hero__subtitle"
+                sequence={[
+                  'AI agents need memory.',
+                  1500,
+                  'AI agents need temporal awareness.',
+                  1500,
+                  'AI agents need structured knowledge.',
+                  1500,
+                  'AI agents need Tela Mentis.',
+                  3000,
+                ]}
+                speed={50}
+                repeat={Infinity}
+                style={{ fontSize: '1.5rem' }}
+              />
+            </div>
+            <p className={styles.heroDescription}>
+              Real-time, temporally-aware, multi-tenant knowledge graphs for AI agents
+              <br />Built with a Rust core and pluggable architecture
+            </p>
+            <div className={styles.buttons}>
+              <Link
+                className="button button--primary button--lg"
+                to="/docs/getting_started">
+                Get Started
+              </Link>
+              <Link
+                className="button button--secondary button--outline button--lg"
+                to="https://github.com/ProdFact/TelaMentis">
+                GitHub
+              </Link>
+              <Link
+                className="button button--secondary button--outline button--lg"
+                to="docs/temporal_semantics">
+                Learn About Bitemporal Features
+              </Link>
+            </div>
+          </div>
+          <div className="col col--6">
+            <div className={styles.heroIllustration}>
+              <img 
+                src={useBaseUrl('/img/hero-illustration.svg')} 
+                alt="Temporal Knowledge Graph Illustration" 
+                className={styles.heroImage}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </header>

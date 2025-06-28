@@ -158,3 +158,44 @@
   border-radius: 8px;
   box-shadow: var(--ifm-card-shadow);
 }
+
+.heroIllustration {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.heroImage {
+  max-width: 100%;
+  height: auto;
+  max-height: 400px;
+  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.2));
+}
+
+@media screen and (max-width: 996px) {
+  .heroImage {
+    max-height: 300px;
+    margin-top: 2rem;
+  }
+}
+
+.architectureDiagram {
+  display: flex;
+  justify-content: center;
+  margin: 3rem 0;
+}
+
+.architectureImage {
+  max-width: 100%;
+  height: auto;
+  max-height: 500px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+@media screen and (max-width: 996px) {
+  .architectureImage {
+    max-height: 350px;
+  }
+}
