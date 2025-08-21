@@ -3,10 +3,9 @@ members = [
     "core",
     "adapters/neo4j",
     "adapters/in_memory",
-    "adapters/in_memory",
     "connectors/openai",
     "connectors/anthropic",
-    "connectors/gemini", 
+    "connectors/gemini",
     "presentation/fastapi-bridge",
     "presentation/grpc",
     "presentation/uds",
@@ -17,7 +16,6 @@ resolver = "2"
 [features]
 default = ["adapter-neo4j", "connector-openai"]
 adapter-neo4j = []
-adapter-in-memory = []
 adapter-in-memory = []
 connector-openai = []
 connector-anthropic = []

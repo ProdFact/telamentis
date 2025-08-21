@@ -26,10 +26,16 @@ impl Neo4jStore {
     pub async fn new(config: Neo4jConfig) -> Result<Self, GraphError> {
         info!("Connecting to Neo4j at {}", config.uri);
         
+        if config.user.is_none() || config.password.is_none() {
+            return Err(GraphError::ConnectionFailed(
+                "Neo4j username and password are required".to_string(),
+            ));
+        }
+
         let graph = Graph::new(
             &config.uri,
-            config.user.as_deref().unwrap_or("neo4j"),
-            config.password.as_deref().unwrap_or("neo4j")
+            config.user.as_deref().unwrap(),
+            config.password.as_deref().unwrap(),
         )
         .await
         .map_err(|e| GraphError::ConnectionFailed(format!("Neo4j connection failed: {}", e)))?;
@@ -47,19 +53,18 @@ impl Neo4jStore {
     /// Create necessary indices for optimal performance
     async fn create_indices(&self) -> Result<(), GraphError> {
         let indices = vec![
-            // Tenant isolation index
+            // Composite index for tenant-scoped lookups by system ID
+            "CREATE CONSTRAINT system_id_constraint IF NOT EXISTS FOR (n) REQUIRE (n._tenant_id, n.system_id) IS UNIQUE",
+            // Composite index for tenant-scoped lookups by alias
+            "CREATE CONSTRAINT node_alias_constraint IF NOT EXISTS FOR (n) REQUIRE (n._tenant_id, n.id_alias) IS UNIQUE",
+            // Tenant isolation indices
             "CREATE INDEX tenant_node_idx IF NOT EXISTS FOR (n) ON (n._tenant_id)",
             "CREATE INDEX tenant_rel_idx IF NOT EXISTS FOR ()-[r]-() ON (r._tenant_id)",
-            // Node alias index
-            "CREATE INDEX node_alias_idx IF NOT EXISTS FOR (n) ON (n.id_alias)",
             // Temporal indices
             "CREATE INDEX valid_from_idx IF NOT EXISTS FOR ()-[r]-() ON (r.valid_from)",
             "CREATE INDEX valid_to_idx IF NOT EXISTS FOR ()-[r]-() ON (r.valid_to)",
             // Transaction time indices
             "CREATE INDEX transaction_start_idx IF NOT EXISTS FOR ()-[r]-() ON (r.transaction_start_time)",
-            "CREATE INDEX transaction_end_idx IF NOT EXISTS FOR ()-[r]-() ON (r.transaction_end_time)",
-            // System ID index
-            "CREATE INDEX system_id_idx IF NOT EXISTS FOR (n) ON (n.system_id)",
         ];
 
         for index_query in indices {
@@ -85,76 +90,68 @@ impl Neo4jStore {
     /// Convert Neo4j node to TelaMentis Node
     fn convert_neo4j_node(&self, node: &neo4j::Node) -> Result<Node, GraphError> {
         let mut props = node.properties().clone();
-        
+
         // Remove system properties
         props.remove("system_id");
         props.remove("_tenant_id");
-        let id_alias = props.remove("id_alias")
+        let id_alias = props
+            .remove("id_alias")
             .and_then(|v| v.as_str().map(|s| s.to_string()));
-        
+
         let labels = node.labels();
-        let label = labels.first()
+        let label = labels
+            .first()
             .ok_or_else(|| GraphError::DatabaseError("Node has no labels".to_string()))?;
 
         Ok(Node {
             id_alias,
             label: label.clone(),
-            props: serde_json::to_value(props)
-                .map_err(|e| GraphError::DatabaseError(format!("Failed to serialize props: {}", e)))?,
+            props: neo4j_props_to_json(&props)?,
         })
     }
 
     /// Convert Neo4j relationship to TelaMentis TimeEdge
     fn convert_neo4j_relationship(&self, rel: &neo4j::Relationship) -> Result<TimeEdge, GraphError> {
         let mut props = rel.properties().clone();
-        
+
         // Extract temporal properties
-        let valid_from = props.remove("valid_from")
+        let valid_from = props
+            .remove("valid_from")
             .ok_or_else(|| GraphError::DatabaseError("Missing valid_from".to_string()))?;
-        let valid_from = self.parse_datetime(&valid_from)?;
-        
-        let valid_to = props.remove("valid_to")
-            .map(|v| self.parse_datetime(&v))
-            .transpose()?;
-            
+        let valid_from = parse_neo4j_datetime(&valid_from)?;
+
+        let valid_to = props.remove("valid_to").map(|v| parse_neo4j_datetime(&v)).transpose()?;
+
         // Extract transaction time properties
-        let transaction_start_time = props.remove("transaction_start_time")
+        let transaction_start_time = props
+            .remove("transaction_start_time")
             .ok_or_else(|| GraphError::DatabaseError("Missing transaction_start_time".to_string()))?;
-        let transaction_start_time = self.parse_datetime(&transaction_start_time)?;
-        
-        let transaction_end_time = props.remove("transaction_end_time")
-            .map(|v| self.parse_datetime(&v))
+        let transaction_start_time = parse_neo4j_datetime(&transaction_start_time)?;
+
+        let transaction_end_time = props
+            .remove("transaction_end_time")
+            .map(|v| parse_neo4j_datetime(&v))
             .transpose()?;
 
         // Remove system properties
         props.remove("system_id");
         props.remove("_tenant_id");
-        props.remove("created_at");
 
         Ok(TimeEdge {
-            from_node_id: *rel.start_node_identity(),
-            to_node_id: *rel.end_node_identity(),
+            from_node_id: Uuid::parse_str(rel.get("from_system_id")?)
+                .map_err(|e| GraphError::DatabaseError(format!("Invalid UUID: {}", e)))?,
+            to_node_id: Uuid::parse_str(rel.get("to_system_id")?)
+                .map_err(|e| GraphError::DatabaseError(format!("Invalid UUID: {}", e)))?,
             kind: rel.rel_type().clone(),
             valid_from,
             valid_to,
             transaction_start_time,
             transaction_end_time,
-            props: serde_json::to_value(props)
-                .map_err(|e| GraphError::DatabaseError(format!("Failed to serialize props: {}", e)))?,
+            props: neo4j_props_to_json(&props)?,
         })
     }
 
-    /// Parse datetime from Neo4j value
-    fn parse_datetime(&self, value: &Value) -> Result<DateTime<Utc>, GraphError> {
-        match value {
-            Value::String(s) => {
-                DateTime::parse_from_rfc3339(s)
-                    .map(|dt| dt.with_timezone(&Utc))
-                    .map_err(|e| GraphError::DatabaseError(format!("Invalid datetime format: {}", e)))
-            }
-            _ => Err(GraphError::DatabaseError("Expected string datetime".to_string()))
-        }
-    }
+
 }
 
 #[async_trait]
@@ -229,62 +226,47 @@ impl GraphStore for Neo4jStore {
     async fn query(&self, tenant: &TenantId, query: GraphQuery) -> Result<Vec<Path>, GraphError> {
         match query {
             GraphQuery::Raw { query, params } => {
-                let tenant_scoped_query = self.add_tenant_filter_node(&query, tenant);
+                warn!("Executing raw query for tenant {}. User is responsible for tenant isolation.", tenant);
                 let mut neo4j_params = params;
                 neo4j_params.insert("tenant_id".to_string(), Value::String(tenant.to_string()));
-                
-                let neo4j_query = Query::new(tenant_scoped_query).params(neo4j_params);
-                
-                debug!("Executing raw query for tenant {}", tenant);
-                
+
+                let neo4j_query = Query::new(query).params(neo4j_params);
+
                 let mut result = self.graph.execute(neo4j_query).await
-                    .map_err(|e| GraphError::QueryFailed(format!("Query execution failed: {}", e)))?;
-                
-                let mut paths = Vec::new();
-                while let Some(_row) = result.next().await
-                    .map_err(|e| GraphError::QueryFailed(format!("Failed to fetch row: {}", e)))? {
-                    // TODO: Convert Neo4j result to Path
-                    // This is a simplified implementation
-                    paths.push(Path {
-                        nodes: Vec::new(),
-                        relationships: Vec::new(),
-                    });
-                }
-                
-                Ok(paths)
-            }
+                    .map_err(|e| GraphError::QueryFailed(format!("Raw query execution failed: {}", e)))?;
             GraphQuery::FindNodes { labels, properties, limit } => {
                 let mut params = HashMap::new();
                 params.insert("tenant_id".to_string(), Value::String(tenant.to_string()));
-                
+
                 let mut query_parts = vec!["MATCH (n)".to_string()];
                 query_parts.push(format!("WHERE n._tenant_id = $tenant_id"));
-                
-                // Add label filters
+
+                // Add label filters safely
                 if !labels.is_empty() {
-                    let label_filter = labels.iter()
-                        .map(|l| format!("n:{}", l))
-                        .collect::<Vec<_>>()
+                    let label_filter = labels
+                        .iter()
+                        .map(|l| sanitize_label(l).map(|s| format!("n:`{}`", s)))
+                        .collect::<Result<Vec<_>, _>>()?
                         .join(" OR ");
                     query_parts.push(format!("AND ({})", label_filter));
                 }
-                
+
                 // Add property filters
-                for (key, value) in properties {
-                    let param_name = format!("prop_{}", key);
-                    params.insert(param_name.clone(), value);
-                    query_parts.push(format!("AND n.{} = ${}", key, param_name));
+                let (prop_filter, prop_params) = build_property_filters(&properties, "n", "prop");
+                if !prop_filter.is_empty() {
+                    query_parts.push(prop_filter);
+                    params.extend(prop_params);
                 }
-                
-                if let Some(limit) = limit {
-                    query_parts.push(format!("LIMIT {}", limit));
-                }
-                
-                query_parts.push("RETURN n".to_string());
-                let query_str = query_parts.join(" ");
-                
-                let neo4j_query = Query::new(query_str).params(params);
-                
+
+                let final_query = query_parts.join(" ") + " RETURN n";
+                let limit_query = if let Some(l) = limit {
+                    format!("{} LIMIT {}", final_query, l)
+                } else {
+                    final_query
+                };
+
+                let neo4j_query = Query::new(limit_query).params(params);
+
                 debug!("Finding nodes for tenant {} with labels: {:?}", tenant, labels);
                 
                 let mut result = self.graph.execute(neo4j_query).await
@@ -312,45 +294,46 @@ impl GraphStore for Neo4jStore {
             GraphQuery::FindRelationships { from_node_id, to_node_id, relationship_types, valid_at, limit } => {
                 let mut params = HashMap::new();
                 params.insert("tenant_id".to_string(), Value::String(tenant.to_string()));
-                
+
                 let mut query_parts = vec!["MATCH (a)-[r]->(b)".to_string()];
                 query_parts.push("WHERE r._tenant_id = $tenant_id".to_string());
-                
+
                 if let Some(from_id) = from_node_id {
                     params.insert("from_id".to_string(), Value::String(from_id.to_string()));
                     query_parts.push("AND a.system_id = $from_id".to_string());
                 }
-                
+
                 if let Some(to_id) = to_node_id {
                     params.insert("to_id".to_string(), Value::String(to_id.to_string()));
                     query_parts.push("AND b.system_id = $to_id".to_string());
                 }
-                
+
                 if !relationship_types.is_empty() {
-                    let type_filter = relationship_types.iter()
-                        .map(|t| format!("type(r) = '{}'", t))
-                        .collect::<Vec<_>>()
+                    let type_filter = relationship_types
+                        .iter()
+                        .map(|t| sanitize_label(t).map(|s| format!("type(r) = '{}'", s)))
+                        .collect::<Result<Vec<_>, _>>()?
                         .join(" OR ");
                     query_parts.push(format!("AND ({})", type_filter));
                 }
-                
+
                 if let Some(valid_at) = valid_at {
                     params.insert("valid_at".to_string(), Value::String(valid_at.to_rfc3339()));
                     query_parts.push("AND r.valid_from <= datetime($valid_at)".to_string());
                     query_parts.push("AND (r.valid_to IS NULL OR datetime($valid_at) < r.valid_to)".to_string());
                 }
-                
-                if let Some(limit) = limit {
-                    query_parts.push(format!("LIMIT {}", limit));
-                }
-                
-                query_parts.push("RETURN a, r, b".to_string());
-                let query_str = query_parts.join(" ");
-                
-                let neo4j_query = Query::new(query_str).params(params);
-                
+
+                let final_query = query_parts.join(" ") + " RETURN a, r, b";
+                let limit_query = if let Some(l) = limit {
+                    format!("{} LIMIT {}", final_query, l)
+                } else {
+                    final_query
+                };
+
+                let neo4j_query = Query::new(limit_query).params(params);
+
                 debug!("Finding relationships for tenant {}", tenant);
-                
+
                 let mut result = self.graph.execute(neo4j_query).await
                     .map_err(|e| GraphError::QueryFailed(format!("Query execution failed: {}", e)))?;
                 

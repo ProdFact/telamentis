@@ -64,7 +64,7 @@ pub enum GraphError {
     #[error("Node not found: {0}")]
     NodeNotFound(String),
     
-    #error("Edge not found: {0}")]
+    #[error("Edge not found: {0}")]
     EdgeNotFound(String),
     
     #[error("Constraint violation: {0}")]

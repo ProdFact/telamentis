@@ -36,8 +36,7 @@ CREATE (from)-[r:${rel_type} {
   valid_from: datetime($valid_from),
   valid_to: CASE WHEN $valid_to IS NOT NULL THEN datetime($valid_to) ELSE null END,
   transaction_start_time: datetime($transaction_start_time),
-  transaction_end_time: null,
-  created_at: datetime()
+  transaction_end_time: null
 }]->(to)
 SET r += $props
 RETURN r.system_id as system_id

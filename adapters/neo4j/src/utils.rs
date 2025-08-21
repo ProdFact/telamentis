@@ -45,11 +45,11 @@ pub fn escape_cypher_string(s: &str) -> String {
 
 /// Sanitize a label name for Cypher
 pub fn sanitize_label(label: &str) -> Result<String, GraphError> {
-    // Check for valid label characters (alphanumeric, underscore)
-    if label.chars().all(|c| c.is_alphanumeric() || c == '_') && !label.is_empty() {
-        Ok(label.to_string())
-    } else {
+    // Basic sanitization: remove backticks and check for non-empty
+    if label.is_empty() || label.contains('`') {
         Err(GraphError::QueryFailed(format!("Invalid label name: {}", label)))
+    } else {
+        Ok(label.to_string())
     }
 }
 

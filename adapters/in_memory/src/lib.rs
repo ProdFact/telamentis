@@ -327,10 +327,8 @@ impl GraphStore for InMemoryStore {
             return Err(GraphError::NodeNotFound(format!("To node {} not found in tenant {}", edge.to_node_id, tenant)));
         }
 
-        // Set transaction time if not already set
-        if edge.transaction_start_time == edge.transaction_start_time {
-            edge.transaction_start_time = Utc::now();
-        }
+        // Set transaction time
+        edge.transaction_start_time = Utc::now();
 
         let edge_id = Uuid::new_v4();
         store.insert_edge(edge_id, edge, tenant);
